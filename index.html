@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quiz for the Girls and the Gays</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div id="app">
+
+  <!-- SETUP SCREEN -->
+  <section id="setup-screen" class="screen active">
+    <h1>Quiz for the Girls and the Gays</h1>
+    <p class="tagline">(and sometimes the Men)</p>
+
+    <div class="card">
+      <h2>Players</h2>
+      <div id="player-list"></div>
+      <button id="add-player-btn" class="ghost small">+ Add Player</button>
+      <p id="party-hint" class="party-hint"></p>
+    </div>
+
+    <div class="card">
+      <h2>Rounds</h2>
+      <p class="muted small">Remove and re-add to reorder.</p>
+      <div id="round-list"></div>
+      <div class="round-add">
+        <button class="add-round-btn ghost small" data-type="long">+ Long Question</button>
+        <button class="add-round-btn ghost small" data-type="theme">+ Theme Round</button>
+        <button class="add-round-btn ghost small" data-type="bid">+ Bid Round</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Settings</h2>
+      <label>
+        <input type="checkbox" id="voice-host" checked>
+        Voice host reads questions aloud
+      </label>
+      <label class="block">
+        <span class="label-text">Voice</span>
+        <select id="voice-select"><option>(loading...)</option></select>
+        <button id="voice-test-btn" class="ghost small" type="button" style="margin-top:0.4rem;">▶ Test voice</button>
+      </label>
+      <label class="block">
+        <span class="label-text">Voice speed</span>
+        <select id="voice-rate">
+          <option value="0.95">Slow</option>
+          <option value="1.05">Normal</option>
+          <option value="1.15" selected>Faster</option>
+          <option value="1.3">Fastest</option>
+        </select>
+      </label>
+      <label>
+        <input type="checkbox" id="auto-judge" checked>
+        Listen for spoken answers (host always has the final say)
+      </label>
+      <label>
+        <input type="checkbox" id="timer-enabled">
+        2-minute timer per question
+      </label>
+      <label>
+        <input type="checkbox" id="avoid-repeats" checked>
+        Avoid questions this group has already seen
+      </label>
+      <label>
+        <input type="checkbox" id="men-mode">
+        Men are playing — tone down the women-specific questions
+      </label>
+      <p id="men-mode-hint" class="muted small" style="display:none;">
+        Filters out questions tagged as women-specific or queer-specific. The quiz becomes slightly more gender-neutral. You're welcome, boys.
+      </p>
+      <p class="muted small">Voice + listening work best in Chrome or Edge. <strong>You can also type answers</strong> — the matcher works on typing too.</p>
+    </div>
+
+    <button id="start-game-btn" class="big">Start Quiz</button>
+    <p id="question-count" class="muted small center"></p>
+  </section>
+
+  <!-- GAME SCREEN -->
+  <section id="game-screen" class="screen">
+    <header class="game-header">
+      <div id="round-info"></div>
+      <div id="scoreboard"></div>
+    </header>
+    <main id="game-main"></main>
+    <footer class="game-footer">
+      <button id="back-to-setup-btn" class="ghost small">⟵ Back to Setup</button>
+    </footer>
+  </section>
+
+  <!-- END SCREEN -->
+  <section id="end-screen" class="screen">
+
+    <div id="winner-view">
+      <div class="winner-card">
+        <div class="winner-crown">🏆</div>
+        <h1 id="winner-name" class="winner-name"></h1>
+        <div id="winner-score" class="winner-score"></div>
+        <p class="winner-tagline">Tonight's reigning champion.</p>
+      </div>
+
+      <div class="recap-section open">
+        <h2>Your top moments <span class="count">(<span id="count-correct">0</span>)</span></h2>
+        <ul id="winner-correct" class="answers-list"></ul>
+      </div>
+
+      <details class="recap-section">
+        <summary>You got these wrong (<span id="count-wrong">0</span>)</summary>
+        <ul id="winner-wrong" class="answers-list"></ul>
+      </details>
+
+      <details class="recap-section">
+        <summary>You passed on (<span id="count-passed">0</span>)</summary>
+        <ul id="winner-passed" class="answers-list"></ul>
+      </details>
+
+      <button id="see-all-players" class="ghost block-btn">See how everyone else did →</button>
+      <button id="play-again-btn" class="big">Play Again</button>
+    </div>
+
+    <div id="all-players-view" style="display:none;">
+      <h1 class="all-players-title">Everyone's Night</h1>
+      <div id="player-recaps"></div>
+      <button id="back-to-winner" class="ghost block-btn">← Back to winner</button>
+      <button id="play-again-btn-2" class="big">Play Again</button>
+    </div>
+
+  </section>
+
+</div>
+
+<script src="questions.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
