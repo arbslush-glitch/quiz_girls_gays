@@ -1046,18 +1046,38 @@ function renderAllPlayersView() {
 
 // ─── Init ─────────────────────────────────────────────────────────
 async function loadQuestions() {
-  if (window.QUESTIONS_DATA && Array.isArray(window.QUESTIONS_DATA.questions)) {
-    state.questions = window.QUESTIONS_DATA.questions;
-  } else {
-    try {
-      const res = await fetch('questions.json');
-      const data = await res.json();
-      state.questions = data.questions || [];
-    } catch (e) {
-      console.error('Failed to load questions', e);
-      state.questions = [];
-    }
+  // Each theme file sets its own window.QUESTIONS_<THEME> global.
+  // The bid pool sets window.QUESTIONS_BID; all its questions are bid_eligible.
+  // The general pool sets window.QUESTIONS_GENERAL.
+  const pools = [
+    window.QUESTIONS_WESTERN_MUSIC,
+    window.QUESTIONS_WORLD_CINEMA,
+    window.QUESTIONS_BOLLYWOOD,
+    window.QUESTIONS_SPORTS,
+    window.QUESTIONS_BRANDS_BUSINESS,
+    window.QUESTIONS_MEMES,
+    window.QUESTIONS_INDIAN_POLITICS,
+    window.QUESTIONS_POP_CULTURE_WEST,
+    window.QUESTIONS_POP_CULTURE_INDIA,
+    window.QUESTIONS_QUEER_CULTURE,
+    window.QUESTIONS_INDIAN_LITERATURE,
+    window.QUESTIONS_GLOBAL_LITERATURE,
+    window.QUESTIONS_INDIAN_CINEMA,
+    window.QUESTIONS_WOMENS_HISTORY,
+    window.QUESTIONS_GENERAL,
+    window.QUESTIONS_BID,
+  ];
+
+  // Mark all bid-pool questions as bid_eligible automatically
+  if (window.QUESTIONS_BID) {
+    window.QUESTIONS_BID.forEach(q => { q.bid_eligible = true; q.topic = q.topic || 'bid'; });
   }
+
+  state.questions = pools
+    .filter(Boolean)
+    .flat()
+    .filter(q => q && q.id && q.question && q.answer);
+
   const cnt = $('#question-count');
   if (cnt) cnt.textContent = `${state.questions.length} questions in the bank.`;
 }
